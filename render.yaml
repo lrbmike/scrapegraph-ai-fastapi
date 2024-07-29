@@ -1,0 +1,5 @@
+services:
+  - name: app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: fastapi run app.py
