@@ -1,5 +1,5 @@
 FROM python:3.10
-FROM mcr.microsoft.com/playwright/python:v1.40.0-jammy
+FROM mcr.microsoft.com/playwright/python:v1.45.1-jammy
 
 WORKDIR /code
 
