@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Body, Request
-from modules import ScrapeGraphAiEngine
+from fastapi import APIRouter, Body
+from app.modules import ScrapeGraphAiEngine
 
 router = APIRouter(
     prefix="/crawl"
