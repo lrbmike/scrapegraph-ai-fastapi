@@ -1,14 +1,14 @@
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.10
 FROM mcr.microsoft.com/playwright/python:v1.40.0-jammy
 
-WORKDIR /app
+WORKDIR /code
 
-COPY ./requirements.txt /app/requirements.txt
+COPY ./requirements.txt /code/requirements.txt
 
-RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-COPY ./app /app
+COPY ./app /code/app
 
-EXPOSE 80
+EXPOSE 8080
 
-CMD ["fastapi", "run", "main.py", "--port", "80"]
+CMD ["fastapi", "run", "app/main.py", "--port", "8080"]
