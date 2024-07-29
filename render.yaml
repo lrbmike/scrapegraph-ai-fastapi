@@ -2,4 +2,4 @@ services:
   - name: app
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: fastapi run main.py
+    startCommand: fastapi run main.py --host 0.0.0.0 --port 80
