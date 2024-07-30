@@ -20,7 +20,7 @@ fastapi run app/main.py
 ```
 
 ## Use
-scraper graph functon
+scraper graph 
 ```shell
 curl -X POST https://your-domain/crawl/scraper_graph \
 -H "Content-Type: application/json" \
@@ -36,7 +36,7 @@ curl -X POST https://your-domain/crawl/scraper_graph \
 
 ```
 
-search graph function
+search graph 
 ```shell
 curl -X POST https://your-domain/crawl/search_graph \
 -H "Content-Type: application/json" \
