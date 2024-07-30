@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 # 路由
-from routers import crawl
+from app.routers import crawl
 
 import sys
 import os
