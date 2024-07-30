@@ -1,4 +1,7 @@
 from fastapi import FastAPI
+# 路由
+from routers import crawl
+
 import sys
 import os
 
@@ -9,8 +12,6 @@ load_dotenv(find_dotenv())
 sys.path.append(os.path.join(os.path.dirname(__file__)))
 
 app = FastAPI()
-
-from routers import crawl
 
 # 将其余单独模块进行整合
 app.include_router(crawl.router)
