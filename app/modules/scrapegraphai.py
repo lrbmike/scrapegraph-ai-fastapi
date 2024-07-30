@@ -1,4 +1,4 @@
-from scrapegraphai.graphs import SmartScraperGraph
+from scrapegraphai.graphs import SmartScraperGraph, SearchGraph
 from scrapegraphai.helpers import models_tokens
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
@@ -45,6 +45,18 @@ class ScrapeGraphAiEngine:
         )
 
         result = await run_blocking_code_in_thread(smart_scraper_graph.run)
+        return result
+
+    async def search(
+            self,
+            prompt: str,
+    ):
+        search_graph = SearchGraph(
+            prompt=prompt,
+            config=self.graph_config
+        )
+
+        result = await run_blocking_code_in_thread(search_graph.run)
         return result
 
     def create_llm(
