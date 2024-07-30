@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Body
+from typing import Optional
 from app.modules import ScrapeGraphAiEngine
 
 router = APIRouter(
@@ -13,8 +14,8 @@ async def scraper_graph(
         llm_name: str = Body(embed=True),
         model_name: str = Body(embed=True),
         embeddings_name: str = Body(embed=True),
-        temperature: float = Body(embed=False),
-        model_instance: bool = Body(embed=False),
+        temperature: Optional[float] = Body(embed=False),
+        model_instance: Optional[bool] = Body(embed=False),
 ):
     engine = ScrapeGraphAiEngine(llm_name=llm_name, model_name=model_name,
                                  embeddings_name=embeddings_name, temperature=temperature,
