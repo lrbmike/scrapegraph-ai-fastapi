@@ -7,6 +7,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 executor = ThreadPoolExecutor()
 
+import nest_asyncio
+
 async def run_blocking_code_in_thread(blocking_func, *args):
     loop = asyncio.get_event_loop()
     return await loop.run_in_executor(executor, blocking_func, *args)
@@ -50,12 +52,14 @@ class ScrapeGraphAiEngine:
             self,
             prompt: str,
     ):
+        nest_asyncio.apply()
+
         search_graph = SearchGraph(
             prompt=prompt,
             config=self.graph_config
         )
 
-        result = await run_blocking_code_in_thread(search_graph.run)
+        result = search_graph.run()
         return result
 
     def create_llm(
@@ -92,29 +96,40 @@ class ScrapeGraphAiEngine:
     def create_model_instance_config(
             self
     ):
+        graph_config = {
+            "llm": {},
+            "verbose": True,
+        }
 
         if self.model_instance:
             llm = self.create_llm()
 
-            graph_config = {
-                "llm": {
-                    "model_instance": llm,
-                    "model_tokens": self.model_tokens,
-                },
-                "verbose": True,
+            graph_config["llm"] = {
+                "model_instance": llm,
+                "model_tokens": self.model_tokens,
             }
-
-            return graph_config
 
         else:
 
-            graph_config = {
-                "llm": {
+            if self.model_provider == "google_genai":
+                # use api endpoint
+                if os.getenv("GOOGLE_API_ENDPOINT"):
+                    graph_config["llm"] = {
+                        "model": self.model_name,
+                        "api_key": os.environ["GOOGLE_API_KEY"],
+                        "transport": "rest",
+                        "client_options": {"api_endpoint": os.environ['GOOGLE_API_ENDPOINT']}
+                    }
+                else:
+                    graph_config["llm"] = {
+                        "model": self.model_name,
+                        "api_key": os.environ["GOOGLE_API_KEY"]
+                    }
+            else:
+                graph_config["llm"] = {
                     "model": self.model_name,
                     "api_key": os.getenv("API_KEY"),
                     "base_url": os.getenv("API_BASE_URL")
-                },
-                "verbose": True,
-            }
+                }
 
             return graph_config
