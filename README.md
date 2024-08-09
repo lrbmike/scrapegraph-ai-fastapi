@@ -32,9 +32,9 @@ fastapi run app/main.py
 
 ### Gemini Model
 
-You need to set  `GOOGLE_API_KEY` or `GOOGLE_API_ENDPOINT`  in `.env` file first.
+You need to set  `GOOGLE_API_KEY` or `GOOGLE_API_ENDPOINT`  in `.env` file first. If you set `GOOGLE_API_ENDPOINT` , it will be configured into the Gemini model.
 
-scraper graph 
+#### scraper graph
 
 ```shell
 curl -X POST https://your-domain/crawl/scraper_graph \
@@ -50,7 +50,8 @@ curl -X POST https://your-domain/crawl/scraper_graph \
 
 ```
 
-search graph 
+#### search graph 
+
 ```shell
 curl -X POST https://your-domain/crawl/search_graph \
 -H "Content-Type: application/json" \
@@ -64,7 +65,7 @@ curl -X POST https://your-domain/crawl/search_graph \
 
 ### OpenAI Model
 
-You need to set  `API_KEY` or `API_BASE_URL`  in `.env` file first.
+You need to set  `API_KEY` or `API_BASE_URL`  in `.env` file first. If you set `API_BASE_URL` , it will be configured into the Gemini model.
 
 scraper graph 
 

@@ -111,6 +111,7 @@ class ScrapeGraphAiEngine:
 
         else:
 
+            # special treatment of Gemini models
             if self.model_provider == "google_genai":
                 # use api endpoint
                 if os.getenv("GOOGLE_API_ENDPOINT"):
