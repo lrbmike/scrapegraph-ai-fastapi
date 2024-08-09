@@ -28,7 +28,7 @@ fastapi run app/main.py
 
 ## Use
 
-> The project use langchain init_chat_model function to initialize a ChatModel from the model name and provider, you can find them by langchain website [inferring-model-provider](https://python.langchain.com/v0.2/docs/how_to/chat_models_universal_init/#inferring-model-provider)
+> The project use langchain init_chat_model function to initialize a ChatModel from the model name and provider, you can find them by langchain website [inferring-model-provider](https://api.python.langchain.com/en/latest/chat_models/langchain.chat_models.base.init_chat_model.html)
 
 ### Gemini Model
 
