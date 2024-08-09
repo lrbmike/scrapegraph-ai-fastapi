@@ -7,12 +7,9 @@ from concurrent.futures import ThreadPoolExecutor
 
 executor = ThreadPoolExecutor()
 
-import nest_asyncio
-nest_asyncio.apply()
-
-# async def run_blocking_code_in_thread(blocking_func, *args):
-#     loop = asyncio.get_event_loop()
-#     return await loop.run_in_executor(executor, blocking_func, *args)
+async def run_blocking_code_in_thread(blocking_func, *args):
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(executor, blocking_func, *args)
 
 
 class ScrapeGraphAiEngine:
@@ -46,8 +43,7 @@ class ScrapeGraphAiEngine:
             config=self.graph_config
         )
 
-        # result = await run_blocking_code_in_thread(smart_scraper_graph.run)
-        result = smart_scraper_graph.run()
+        result = await run_blocking_code_in_thread(smart_scraper_graph.run)
         return result
 
     async def search(
@@ -59,8 +55,7 @@ class ScrapeGraphAiEngine:
             config=self.graph_config
         )
 
-        # result = await run_blocking_code_in_thread(search_graph.run)
-        result = search_graph.run()
+        result = await run_blocking_code_in_thread(search_graph.run)
         return result
 
     def create_llm(
