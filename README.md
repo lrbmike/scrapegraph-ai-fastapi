@@ -28,7 +28,7 @@ fastapi run app/main.py
 
 ## Use
 
-> The project use langchain init_chat_model function to initialize a ChatModel from the model name and provider, you can find them by langchain website [inferring-model-provider](https://api.python.langchain.com/en/latest/chat_models/langchain.chat_models.base.init_chat_model.html)
+> The project use langchain init_chat_model function to initialize a ChatModel from the model name and provider, you can find them by langchain website [init_chat_model](https://api.python.langchain.com/en/latest/chat_models/langchain.chat_models.base.init_chat_model.html)
 
 ### Gemini Model
 
@@ -58,8 +58,7 @@ curl -X POST https://your-domain/crawl/search_graph \
     "prompt": "List me all the traditional recipes from Chioggia",
     "model_provider": "google_genai",
     "model_name": "gemini-1.5-flash-latest",
-    "temperature": 0,
-    "model_instance": true
+    "temperature": 0
 }'
 ```
 
@@ -91,8 +90,7 @@ curl -X POST https://your-domain/crawl/search_graph \
     "prompt": "List me all the traditional recipes from Chioggia",
     "model_provider": "openai",
     "model_name": "gpt-4o-mini",
-    "temperature": 0,
-    "model_instance": false
+    "temperature": 0
 }'
 ```
 
@@ -105,4 +103,6 @@ curl -X POST https://your-domain/crawl/search_graph \
 Or you can publish to [Render](https://render.com/)
 
 ## Known issues
-The current support for models is not perfect, and there are quite a few such problems in [Scrapegraph-ai](https://github.com/ScrapeGraphAI/Scrapegraph-ai/issues).
+> The current support for models is not perfect, and there are quite a few such problems in [Scrapegraph-ai](https://github.com/ScrapeGraphAI/Scrapegraph-ai/issues).
+
+- When using the Search Graph method, you can't initialize the model using the `model_instance` 
