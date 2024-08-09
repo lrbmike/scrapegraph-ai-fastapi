@@ -11,15 +11,13 @@ router = APIRouter(
 async def scraper_graph(
         prompt: str = Body(embed=True),
         url: str = Body(embed=True),
-        llm_name: str = Body(embed=True),
+        model_provider: str = Body(embed=True),
         model_name: str = Body(embed=True),
-        embeddings_name: str = Body(embed=True),
         temperature: Optional[float] = Body(embed=False),
         model_instance: Optional[bool] = Body(embed=False),
 ):
-    engine = ScrapeGraphAiEngine(llm_name=llm_name, model_name=model_name,
-                                 embeddings_name=embeddings_name, temperature=temperature,
-                                 model_instance=model_instance)
+    engine = ScrapeGraphAiEngine(model_provider=model_provider, model_name=model_name,
+                                 temperature=temperature, model_instance=model_instance)
 
     return await engine.crawl(prompt=prompt, source=url)
 
@@ -27,14 +25,12 @@ async def scraper_graph(
 @router.post("/search_graph")
 async def search_graph(
         prompt: str = Body(embed=True),
-        llm_name: str = Body(embed=True),
+        model_provider: str = Body(embed=True),
         model_name: str = Body(embed=True),
-        embeddings_name: str = Body(embed=True),
         temperature: float = Body(embed=False),
         model_instance: bool = Body(embed=False),
 ):
-    engine = ScrapeGraphAiEngine(llm_name=llm_name, model_name=model_name,
-                                 embeddings_name=embeddings_name, temperature=temperature,
-                                 model_instance=model_instance)
+    engine = ScrapeGraphAiEngine(model_provider=model_provider, model_name=model_name,
+                                 temperature=temperature, model_instance=model_instance)
 
     return await engine.search(prompt=prompt)

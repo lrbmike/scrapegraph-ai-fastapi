@@ -1,7 +1,6 @@
 from scrapegraphai.graphs import SmartScraperGraph, SearchGraph
 from scrapegraphai.helpers import models_tokens
-from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain.chat_models import init_chat_model
 import os
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
@@ -15,18 +14,19 @@ async def run_blocking_code_in_thread(blocking_func, *args):
 
 
 class ScrapeGraphAiEngine:
-
+    """
+    Your can find the model_provider by langchain website:
+    https://python.langchain.com/v0.2/docs/how_to/chat_models_universal_init/#inferring-model-provider
+    """
     def __init__(
             self,
-            llm_name: str,
+            model_provider: str,
             model_name: str,
-            embeddings_name: str,
             temperature: float = 0,
             model_instance: bool = False
     ):
-        self.llm_name = llm_name
+        self.model_provider = model_provider
         self.model_name = model_name
-        self.embeddings_name = embeddings_name
         self.temperature = temperature
         self.model_instance = model_instance
 
@@ -62,29 +62,33 @@ class ScrapeGraphAiEngine:
     def create_llm(
             self
     ):
-        if self.llm_name == "Gemini":
+        # special treatment of Gemini models
+        if self.model_provider == "google_genai":
             if models_tokens["gemini"][self.model_name]:
                 self.model_tokens = models_tokens["gemini"][self.model_name]
 
-            return ChatGoogleGenerativeAI(model=self.model_name, temperature=self.temperature,
-                                          google_api_key=os.getenv('GOOGLE_API_KEY'))
+            # use api endpoint
+            if os.getenv("GOOGLE_API_ENDPOINT"):
 
-        elif self.llm_name == "OpenAI":
-            if models_tokens["openai"][self.model_name]:
-                self.model_tokens = models_tokens["openai"][self.model_name]
+                return init_chat_model(
+                    self.model_name, model_provider=self.model_provider, temperature=self.temperature,
+                    api_key=os.environ["GOOGLE_API_KEY"], transport="rest",
+                    client_options={"api_endpoint": os.environ['GOOGLE_API_ENDPOINT']}
+                )
 
-            return ChatOpenAI(model=self.model_name, temperature=self.temperature,
-                              api_key=os.getenv("OPENAI_API_KEY"), base_url=os.getenv("OPENAI_API_BASE"))
+            return init_chat_model(
+                self.model_name, model_provider=self.model_provider, temperature=self.temperature,
+                api_key=os.environ["GOOGLE_API_KEY"]
+            )
 
-    def create_embeddings(
-            self
-    ):
-        if self.llm_name == "Gemini":
-            return GoogleGenerativeAIEmbeddings(model=self.embeddings_name,
-                                                google_api_key=os.environ['GOOGLE_API_KEY'])
+        else:
+            if models_tokens[self.model_provider][self.model_name]:
+                self.model_tokens = models_tokens[self.model_provider][self.model_name]
 
-        elif self.llm_name == "OpenAI":
-            return OpenAIEmbeddings(api_key=os.getenv("OPENAI_API_KEY"), base_url=os.getenv("OPENAI_API_BASE"))
+            return init_chat_model(
+                self.model_name, model_provider=self.model_provider, temperature=self.temperature,
+                api_key=os.environ["API_KEY"], base_url=os.environ["API_BASE_URL"]
+            )
 
     def create_model_instance_config(
             self
@@ -92,15 +96,11 @@ class ScrapeGraphAiEngine:
 
         if self.model_instance:
             llm = self.create_llm()
-            embeddings = self.create_embeddings()
 
             graph_config = {
                 "llm": {
                     "model_instance": llm,
                     "model_tokens": self.model_tokens,
-                },
-                "embeddings": {
-                    "model_instance": embeddings,
                 },
                 "verbose": True,
             }
@@ -112,11 +112,8 @@ class ScrapeGraphAiEngine:
             graph_config = {
                 "llm": {
                     "model": self.model_name,
-                    "api_key": os.getenv("OPENAI_API_KEY"),
-                    "base_url": os.getenv("OPENAI_API_BASE")
-                },
-                "embeddings": {
-                    "model": self.embeddings_name,
+                    "api_key": os.getenv("API_KEY"),
+                    "base_url": os.getenv("API_BASE_URL")
                 },
                 "verbose": True,
             }
