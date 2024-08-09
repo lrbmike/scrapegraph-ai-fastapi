@@ -15,7 +15,7 @@ async def run_blocking_code_in_thread(blocking_func, *args):
 
 class ScrapeGraphAiEngine:
     """
-    Your can find the model_provider by langchain website:
+    You can find the model_provider by langchain website:
     https://python.langchain.com/v0.2/docs/how_to/chat_models_universal_init/#inferring-model-provider
     """
     def __init__(
