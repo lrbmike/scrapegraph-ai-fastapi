@@ -50,7 +50,7 @@ curl -X POST https://your-domain/crawl/scraper_graph \
 
 ```
 
-#### search graph 
+#### search graph
 
 ```shell
 curl -X POST https://your-domain/crawl/search_graph \
@@ -67,7 +67,7 @@ curl -X POST https://your-domain/crawl/search_graph \
 
 You need to set  `API_KEY` or `API_BASE_URL`  in `.env` file first. If you set `API_BASE_URL` , it will be configured into the Gemini model.
 
-scraper graph 
+#### scraper graph
 
 ```shell
 curl -X POST https://your-domain/crawl/scraper_graph \
@@ -82,7 +82,7 @@ curl -X POST https://your-domain/crawl/scraper_graph \
 }'
 ```
 
-search graph 
+#### search graph
 
 ```shell
 curl -X POST https://your-domain/crawl/search_graph \
