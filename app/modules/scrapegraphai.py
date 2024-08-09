@@ -56,7 +56,7 @@ class ScrapeGraphAiEngine:
             config=self.graph_config
         )
 
-        result = search_graph.run()
+        result = await run_blocking_code_in_thread(search_graph.run)
         return result
 
     def create_llm(
