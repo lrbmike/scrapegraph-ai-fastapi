@@ -13,11 +13,10 @@ async def scraper_graph(
         url: str = Body(embed=True),
         model_provider: str = Body(embed=True),
         model_name: str = Body(embed=True),
-        temperature: Optional[float] = Body(embed=False),
-        model_instance: Optional[bool] = Body(embed=False),
+        temperature: Optional[float] = Body(embed=False)
 ):
     engine = ScrapeGraphAiEngine(model_provider=model_provider, model_name=model_name,
-                                 temperature=temperature, model_instance=model_instance)
+                                 temperature=temperature)
 
     return await engine.crawl(prompt=prompt, source=url)
 
@@ -27,10 +26,9 @@ async def search_graph(
         prompt: str = Body(embed=True),
         model_provider: str = Body(embed=True),
         model_name: str = Body(embed=True),
-        temperature: float = Body(embed=False),
-        model_instance: bool = Body(embed=False),
+        temperature: float = Body(embed=False)
 ):
     engine = ScrapeGraphAiEngine(model_provider=model_provider, model_name=model_name,
-                                 temperature=temperature, model_instance=model_instance)
+                                 temperature=temperature)
 
     return await engine.search(prompt=prompt)

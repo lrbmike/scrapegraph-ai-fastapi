@@ -1,6 +1,4 @@
 from scrapegraphai.graphs import SmartScraperGraph, SearchGraph
-from scrapegraphai.helpers import models_tokens
-from langchain.chat_models import init_chat_model
 import os
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
@@ -23,13 +21,11 @@ class ScrapeGraphAiEngine:
             self,
             model_provider: str,
             model_name: str,
-            temperature: float = 0,
-            model_instance: bool = False
+            temperature: float = 0
     ):
         self.model_provider = model_provider
         self.model_name = model_name
         self.temperature = temperature
-        self.model_instance = model_instance
 
         self.model_tokens = 128000
         self.graph_config = self.create_model_instance_config()
@@ -62,37 +58,6 @@ class ScrapeGraphAiEngine:
         result = search_graph.run()
         return result
 
-    def create_llm(
-            self
-    ):
-        # special treatment of Gemini models
-        if self.model_provider == "google_genai":
-            if models_tokens["gemini"][self.model_name]:
-                self.model_tokens = models_tokens["gemini"][self.model_name]
-
-            # use api endpoint
-            if os.getenv("GOOGLE_API_ENDPOINT"):
-
-                return init_chat_model(
-                    self.model_name, model_provider=self.model_provider, temperature=self.temperature,
-                    api_key=os.environ["GOOGLE_API_KEY"], transport="rest",
-                    client_options={"api_endpoint": os.environ['GOOGLE_API_ENDPOINT']}
-                )
-
-            return init_chat_model(
-                self.model_name, model_provider=self.model_provider, temperature=self.temperature,
-                api_key=os.environ["GOOGLE_API_KEY"]
-            )
-
-        else:
-            if models_tokens[self.model_provider][self.model_name]:
-                self.model_tokens = models_tokens[self.model_provider][self.model_name]
-
-            return init_chat_model(
-                self.model_name, model_provider=self.model_provider, temperature=self.temperature,
-                api_key=os.environ["API_KEY"], base_url=os.environ["API_BASE_URL"]
-            )
-
     def create_model_instance_config(
             self
     ):
@@ -101,43 +66,23 @@ class ScrapeGraphAiEngine:
             "verbose": True,
         }
 
-        if self.model_instance:
-            llm = self.create_llm()
-
+        if self.model_provider == "google_genai":
             graph_config["llm"] = {
-                "model_instance": llm,
-                "model_tokens": self.model_tokens,
+                "model": self.model_name,
+                "api_key": os.environ["GOOGLE_API_KEY"]
             }
+            if os.getenv("GOOGLE_API_ENDPOINT"):
+                graph_config["llm"]["transport"] = "rest"
+                graph_config["llm"]["client_options"] = {"api_endpoint": os.environ['GOOGLE_API_ENDPOINT']}
 
         else:
+            graph_config["llm"] = {
+                "model": self.model_name,
+                "api_key": os.getenv("API_KEY")
+            }
+            if os.getenv("API_BASE_URL"):
+                graph_config["llm"]["base_url"] = os.getenv("API_BASE_URL")
 
-            # special treatment of Gemini models
-            if self.model_provider == "google_genai":
-                # use api endpoint
-                if os.getenv("GOOGLE_API_ENDPOINT"):
-                    graph_config["llm"] = {
-                        "model": self.model_name,
-                        "api_key": os.environ["GOOGLE_API_KEY"],
-                        "transport": "rest",
-                        "client_options": {"api_endpoint": os.environ['GOOGLE_API_ENDPOINT']}
-                    }
-                else:
-                    graph_config["llm"] = {
-                        "model": self.model_name,
-                        "api_key": os.environ["GOOGLE_API_KEY"]
-                    }
-            # special treatment of local models
-            elif self.model_provider == "ollama":
-                graph_config["llm"] = {
-                    "model": self.model_name,
-                    "format": "json", # Ollama needs the format to be specified explicitly
-                    # "base_url": "http://localhost:11434",
-                }
-            else:
-                graph_config["llm"] = {
-                    "model": self.model_name,
-                    "api_key": os.getenv("API_KEY"),
-                    "base_url": os.getenv("API_BASE_URL")
-                }
+        return graph_config
 
-            return graph_config
+

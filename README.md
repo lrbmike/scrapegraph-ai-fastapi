@@ -8,6 +8,8 @@ Project base on [ScrapeGraphAI](https://github.com/ScrapeGraphAI/Scrapegraph-ai.
 pip install -r requirements.txt
 # Browser driver install
 playwright install
+# If prompted "ImportError: burr package is not installed. Please install it with 'pip install scrapegraphai[burr]'"
+pip install scrapegraphai[burr]
 ```
 
 ## Environment
@@ -44,8 +46,7 @@ curl -X POST https://your-domain/crawl/scraper_graph \
     "url": "https://techcrunch.com/category/artificial-intelligence/",
     "model_provider": "google_genai",
     "model_name": "gemini-1.5-flash-latest",
-    "temperature": 0,
-    "model_instance": true
+    "temperature": 0
 }'
 
 ```
@@ -65,7 +66,7 @@ curl -X POST https://your-domain/crawl/search_graph \
 
 ### OpenAI Model
 
-You need to set  `API_KEY` or `API_BASE_URL`  in `.env` file first. If you set `API_BASE_URL` , it will be configured into the Gemini model.
+You need to set  `API_KEY` or `API_BASE_URL`  in `.env` file first. If you set `API_BASE_URL` , it will be configured into the OpenAI model.
 
 #### scraper graph
 
@@ -77,8 +78,7 @@ curl -X POST https://your-domain/crawl/scraper_graph \
     "url": "https://techcrunch.com/category/artificial-intelligence/",
     "model_provider": "openai",
     "model_name": "gpt-4o-mini",
-    "temperature": 0,
-    "model_instance": false
+    "temperature": 0
 }'
 ```
 
@@ -95,7 +95,34 @@ curl -X POST https://your-domain/crawl/search_graph \
 }'
 ```
 
+### Ollama
 
+#### scraper graph
+
+```shell
+curl -X POST https://your-domain/crawl/scraper_graph \
+-H "Content-Type: application/json" \
+-d '{
+    "prompt": "List me all the articles with their title、description、link、published",
+    "url": "https://next.ithome.com/",
+    "model_provider": "ollama",
+    "model_name": "ollama/llama3.1",
+    "temperature": 0
+}'
+```
+
+#### search graph
+
+```shell
+curl -X POST https://your-domain/crawl/search_graph \
+-H "Content-Type: application/json" \
+-d '{
+    "prompt": "List me all the traditional recipes from Chioggia",
+    "model_provider": "ollama",
+    "model_name": "ollama/llama3.1",
+    "temperature": 0
+}'
+```
 
 ## Docker
 
@@ -106,4 +133,3 @@ Or you can publish to [Render](https://render.com/)
 ## Known issues
 > The current support for models is not perfect, and there are quite a few such problems in [Scrapegraph-ai](https://github.com/ScrapeGraphAI/Scrapegraph-ai/issues).
 
-- When using the Search Graph method, you can't initialize the model using the `model_instance` 
