@@ -12,8 +12,8 @@ load_dotenv(find_dotenv())
 sys.path.append(os.path.join(os.path.dirname(__file__)))
 
 # local proxy test
-# os.environ["http_proxy"] = "http://127.0.0.1:1080"
-# os.environ["https_proxy"] = "http://127.0.0.1:1080"
+os.environ["http_proxy"] = "http://127.0.0.1:10809"
+os.environ["https_proxy"] = "http://127.0.0.1:10809"
 
 app = FastAPI()
 

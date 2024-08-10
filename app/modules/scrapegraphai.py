@@ -126,6 +126,13 @@ class ScrapeGraphAiEngine:
                         "model": self.model_name,
                         "api_key": os.environ["GOOGLE_API_KEY"]
                     }
+            # special treatment of local models
+            elif self.model_provider == "ollama":
+                graph_config["llm"] = {
+                    "model": self.model_name,
+                    "format": "json", # Ollama needs the format to be specified explicitly
+                    # "base_url": "http://localhost:11434",
+                }
             else:
                 graph_config["llm"] = {
                     "model": self.model_name,

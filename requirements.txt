@@ -1,4 +1,5 @@
-scrapegraphai==1.12.2
+scrapegraphai==1.13.1
 fastapi==0.111.1
 python-dotenv==1.0.1
 nest-asyncio==1.6.0
+langchain-ollama==0.1.1
