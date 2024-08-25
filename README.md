@@ -45,7 +45,7 @@ curl -X POST https://your-domain/crawl/scraper_graph \
     "prompt": "List me all the articles with their title、description、link、published",
     "url": "https://techcrunch.com/category/artificial-intelligence/",
     "model_provider": "google_genai",
-    "model_name": "gemini-1.5-flash-latest",
+    "model_name": "google_genai/gemini-1.5-flash-latest",
     "temperature": 0
 }'
 
@@ -59,7 +59,7 @@ curl -X POST https://your-domain/crawl/search_graph \
 -d '{
     "prompt": "List me all the traditional recipes from Chioggia",
     "model_provider": "google_genai",
-    "model_name": "gemini-1.5-flash-latest",
+    "model_name": "google_genai/gemini-1.5-flash-latest",
     "temperature": 0
 }'
 ```
