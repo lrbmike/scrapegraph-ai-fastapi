@@ -10,6 +10,8 @@ pip install -r requirements.txt
 playwright install
 # If prompted "ImportError: burr package is not installed. Please install it with 'pip install scrapegraphai[burr]'"
 pip install scrapegraphai[burr]
+# If prompted RuntimeError: To use the fastapi command, please install "fastapi[standard]"
+pip install "fastapi[standard]"
 ```
 
 ## Environment
